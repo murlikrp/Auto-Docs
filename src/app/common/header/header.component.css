@@ -4,9 +4,15 @@
     margin: 0px;
     font-family: Helvetica;
     font-size: 30px !important;
-    background-color: #008000;
+    background-color: #0a382b;
     color: white;
     padding-top: 14px;
     height: 55px;
     width: 100%;
+}
+
+.logo-class {
+    height: 55px;
+    float: left;
+    margin-top: -14px;
 }
