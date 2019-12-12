@@ -12,13 +12,16 @@ import { ApplicationService } from '../services/application.service';
 })
 export class AutoDocsComponent implements OnInit {
   docLink = null;
+  isSubmitted:boolean=false;
   constructor() { }
 
   ngOnInit() {
   }
 
-  submitForm(link: any) {
-   this.docLink =  link;
+  submitForm(data: any) {
+    console.log('data ',data);
+   this.docLink =  data.link;
+   this.isSubmitted = data.isSubmitted;
   }
 
 }

@@ -26,10 +26,10 @@ export class DocsFormComponent implements OnInit {
     this.getCheckedItemList();
   }
 
-  formTypes = ['Lending', 'Servicing', 'Deposits', 'Employee'];
-  loanNumSearchList: any = ['60-123456', '60-123457','60-123458','60-123459','60-44444','60-4444234'];
+  formTypes = ['Lending', 'Servicing', 'Deposits', 'Employee','PWM'];
+  loanNumSearchList: any = ['60-123456', '60-123457','60-123458','60-123459','60-444445','60-444423'];
   
-  formSearchList: any = ['60-123456', '60-123457','60-123458','60-123459','60-44444','60-4444234'];
+  formSearchList: any = ['60-123456', '60-123457','60-123458','60-123459','60-444445','60-444423'];
   
   model = {
     formType: '',
@@ -41,6 +41,7 @@ export class DocsFormComponent implements OnInit {
   masterSelected: boolean;
   checklist: any;
   checkedList: any;
+  conf:any = {};
 
   submitted = false;
   docLink = null;
@@ -66,29 +67,37 @@ export class DocsFormComponent implements OnInit {
         this.checklist[i].isSelected = this.masterSelected;
       }
       this.getCheckedItemList();
+      // location.reload();
     }
-    isAllSelected() {
-      this.masterSelected = this.checklist.every(function(item:any) {
-          return item.isSelected == true;
-        })
-      this.getCheckedItemList();
+    isAllSelected(event) {
+      // this.masterSelected = this.checklist.every(function(item:any) {
+      //     return item.isSelected == true;
+      //   })
+      // this.getCheckedItemList();
+      
+      this.submitted = false;
+      console.log('conf after uncheck ',this.conf)
+      if(event.target.checked) {
+        this.getCheckedItemList();
+      } 
     }
   
     getCheckedItemList(){
       this.checkedList = [];
       for (var i = 0; i < this.checklist.length; i++) {
-        if(this.checklist[1].isSelected) {
-          this.checkedList.push(this.checklist[0]);
+        if(this.checklist[i].isSelected) {
+          this.checkedList.push(this.checklist[i]);
         }
-        else if(this.checklist[0].isSelected) {
-          this.checkedList.push(this.checklist[1]);
-        }
+        // else if(this.checklist[0].isSelected) {
+        //   this.checkedList.push(this.checklist[1]);
+        // }
       }
-      this.checkedList = JSON.stringify(this.checkedList);
+      console.log('checkedList',this.checkedList)
+      // this.checkedList = JSON.stringify(this.checkedList);
     }
 
   onSubmit() {
-    console.log(this.checklist[0]);
+    
     this.submitted = true;
     const inputReqObj =  {
       formType: this.model.formType,
@@ -102,13 +111,25 @@ export class DocsFormComponent implements OnInit {
     // });
 
     this.applicationService.getFormList().subscribe(data => {
-      console.log(data.autoDocs[0].doclink)
-      if(this.checklist[0].isSelected) {
-        this.docLink = data.autoDocs[0].doclink[1].value;
-      } else {
+      
+      if(this.checkedList[0].value == 'CRE Commitment Letter') {
         this.docLink = data.autoDocs[0].doclink[0].value;
+        // this.submitted =false;
+      } else if(this.checkedList[0].value == 'RES ACP Commitment Letter'){
+        this.docLink = data.autoDocs[0].doclink[1].value;
+        // this.submitted = false;
       }
-      this.submitForm.emit(this.docLink);
+      
+      this.conf = {
+        link : this.docLink,
+        isSubmitted : this.submitted 
+      }
+      console.log('conf',this.conf);
+      this.submitForm.emit(this.conf);
+      // if(this.submitted && this.docLink) {
+        
+      // }
+      this.submitted = false;
     })
   }
 

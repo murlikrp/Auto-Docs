@@ -28,7 +28,7 @@
             </ul>
             <ul class="list-group">
                 <li class="list-group-item" *ngFor="let item of checklist">
-                    <input type="checkbox" [(ngModel)]="item.isSelected" name="list_name" value="{{item.id}}" (change)="isAllSelected()" />  &nbsp; &nbsp;{{item.value}}
+                    <input type="checkbox" [(ngModel)]="item.isSelected" name="list_name" value="{{item.id}}" (change)="isAllSelected($event)" />  &nbsp; &nbsp;{{item.value}}
                 </li>
             </ul>
         </div>

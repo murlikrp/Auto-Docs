@@ -3,8 +3,8 @@
         <div class="col-sm-4">
             <app-docs-form (submitForm)="submitForm($event)"></app-docs-form>
         </div>
-        <div class="col-sm-8" *ngIf="docLink">
-            <app-docs-view [docLink]="docLink"></app-docs-view>
+        <div class="col-sm-8" *ngIf="docLink && isSubmitted">
+            <app-docs-view [docLink]="docLink" [isSubmitted]="isSubmitted"></app-docs-view>
         </div>
     </div>
 </div>
