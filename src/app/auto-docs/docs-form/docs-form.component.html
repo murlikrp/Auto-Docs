@@ -15,7 +15,6 @@
             />
         </div> -->
 
-        
 
         <div class="form-group" *ngIf="flag">
             <label for="documents">Choose Documents</label>
@@ -40,10 +39,27 @@
         </div> -->
 
         <div class="form-group">
-            <label for="exampleFormControlSelect2">Loan Number</label>
-            <input id="typeahead-basic" required [disabled]="!model.formType" name="loanNumber" type="text" class="form-control" 
-            [(ngModel)]="model.formSearch" [ngbTypeahead]="searchLoanNum" placeholder="Search Loan Number"
-            />
+            <div class="row">
+                <div class="col-sm-6">
+                        <label for="exampleFormControlSelect2">Field Type</label>
+                        <select class="form-control" id="formType" required name="fieldType" 
+                        [(ngModel)]="model.fieldType"
+                                (change)="onFieldChange(model.fieldType)">
+                                <!-- <option [value]="Select" disabled>Select</option> -->
+                                <option *ngFor="let f of fieldTypesList"
+                                [disabled]="f == 'Select'"
+                                [value]="f">{{f}}</option>
+                            </select>
+                </div>
+                <div class="col-sm-6">
+                        <label for="exampleFormControlSelect2">Field Value</label>
+                        <input id="typeahead-basic" required name="fieldValue" type="text" class="form-control" 
+                        [disabled]="!model.fieldType || (model.fieldType && model.fieldType=='Select')"
+                        [(ngModel)]="model.fieldValue" [ngbTypeahead]="searchLoanNum" placeholder="Value"
+                        />
+                </div>
+            </div>
+            
         </div>
 
         <div class="form-group">

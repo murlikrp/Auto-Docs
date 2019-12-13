@@ -13,7 +13,9 @@ import { ApplicationService } from 'src/app/services/application.service';
 export class DocsFormComponent implements OnInit {
 
   @Output() submitForm = new EventEmitter();
-  flag:boolean = false;
+  flag: boolean = false;
+  list = [];
+  fieldTypesList = ['Select', 'Loan Number', 'SSN', 'Name', 'Deposit', 'Checking Account Number', 'Saving Account Number'];
   constructor(private applicationService: ApplicationService) {
     this.masterSelected = false;
     this.checklist = [
@@ -24,17 +26,21 @@ export class DocsFormComponent implements OnInit {
     ];
     this.checkedList = [];
     this.getCheckedItemList();
+
   }
 
   formTypes = ['Lending', 'Servicing', 'Deposits', 'Employee','PWM'];
   loanNumSearchList: any = ['60-123456', '60-123457','60-123458','60-123459','60-444445','60-444423'];
-  
+  ssnList: any = ['160-123-456', '109-123-457','160-123-458','160-123-459','160-444-445','160-444-423'];
+  nameList: any = ['Joe Smith', 'John','Emma','Mantas','Manish Bagwari','Srikanth Ramesh'];
+
   formSearchList: any = ['60-123456', '60-123457','60-123458','60-123459','60-444445','60-444423'];
   
   model = {
     formType: '',
     formSearch: '',
-    loanNumber: ''
+    fieldValue: '',
+    fieldType: ''
   };
 
   title = 'Select Documents';
@@ -59,7 +65,7 @@ export class DocsFormComponent implements OnInit {
       debounceTime(200),
       distinctUntilChanged(),
       map(term => term.length < 2 ? []
-        : this.loanNumSearchList.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+        : this.list.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     )
 
     checkUncheckAll() {
@@ -95,14 +101,27 @@ export class DocsFormComponent implements OnInit {
       console.log('checkedList',this.checkedList)
       // this.checkedList = JSON.stringify(this.checkedList);
     }
-
+    onFieldChange(fieldType: any) {
+      this.model.fieldValue = '';
+      
+      this.list = []
+      console.log('---', fieldType)
+      if(fieldType === 'Loan Number') {
+        this.list = this.loanNumSearchList;
+      } else if(fieldType === 'SSN') {
+        this.list = this.ssnList;
+      } else if(fieldType === 'Name') {
+        this.list = this.nameList;
+      }
+      
+    }
   onSubmit() {
-    
+
     this.submitted = true;
     const inputReqObj =  {
       formType: this.model.formType,
-      formSearch: this.model.formSearch,
-      loanNumber: this.model.loanNumber,
+      fieldType: this.model.fieldType,
+      fieldValue: this.model.fieldValue,
       selectedDocs: this.checkedList
     };
     // this.applicationService.getDoc(inputReqObj).subscribe(data => {
@@ -135,6 +154,7 @@ export class DocsFormComponent implements OnInit {
 
   ngOnInit() {
     this.model.formType = 'Lending';
+    this.model.fieldType = 'Select';
     // this.applicationService.getFormList().subscribe(data => {
     //   // console.log(data);
     //  // this.formList = data.autoDocs[0].formType;
@@ -143,13 +163,11 @@ export class DocsFormComponent implements OnInit {
   }
 
   onSelection(value) {
-    
     switch(value) {
-        case 'formtypevalue': 
+        case 'formtypevalue':
             console.log(value);
             this.changeSelection();
-            break; 
-        
+            break;
     }
 
   }
