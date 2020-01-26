@@ -11,7 +11,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 export class DocsViewComponent implements OnInit {
   docLinkObj: any = {};
   @Input() docLink: any;
-  @Input() isSubmitted:boolean;
+  @Input() isSubmitted: boolean;
     constructor(private applicationService: ApplicationService, public sanitizer: DomSanitizer) {
   }
 
